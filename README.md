@@ -16,6 +16,5 @@ Requires a .env file with the following:
 
 ```
 CLIENT_ID=
-GUILD_ID=
 TOKEN=
 ```
