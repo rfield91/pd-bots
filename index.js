@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Client, Intents, MessageActionRow, MessageSelectMenu, Permissions } = require('discord.js');
+const { Client, Intents, Permissions } = require('discord.js');
 const { responses } = require('./responses.json');
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS] });
@@ -22,7 +22,10 @@ client.on('interactionCreate', async interaction => {
             const taggedUser = interaction.options.getMember('user');
             const newNickname = interaction.options.getString('newnickname');
 
-            if (!taggedUser.permissions.has([Permissions.FLAGS.MANAGE_NICKNAMES, Permissions.FLAGS.CHANGE_NICKNAME])) {
+            if (newNickname.length > 32) {
+                interaction.reply({ content: `New nickname is too long. Maximum is 32 characters, ${newNickname} is ${newNickname.length}`, ephemeral: true });
+            }
+            else if (!taggedUser.permissions.has([Permissions.FLAGS.MANAGE_NICKNAMES, Permissions.FLAGS.CHANGE_NICKNAME])) {
                 taggedUser.setNickname(newNickname);
 
                 const randomResponse = randomInteger(0, responses.length - 1);
