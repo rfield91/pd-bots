@@ -23,7 +23,7 @@ client.on('interactionCreate', async interaction => {
             const newNickname = interaction.options.getString('newnickname');
 
             if (newNickname.length > 32) {
-                interaction.reply({ content: `New nickname is too long. Maximum is 32 characters, ${newNickname} is ${newNickname.length}`, ephemeral: true });
+                interaction.reply({ content: `New nickname is too long. Maximum is 32 characters, \`${newNickname}\` is ${newNickname.length}`, ephemeral: true });
             }
             else if (!taggedUser.permissions.has([Permissions.FLAGS.MANAGE_NICKNAMES, Permissions.FLAGS.CHANGE_NICKNAME])) {
                 taggedUser.setNickname(newNickname);
@@ -33,7 +33,7 @@ client.on('interactionCreate', async interaction => {
                 interaction.reply({ content: `${responses[randomResponse]} ${taggedUser}` });
             }
             else {
-                interaction.reply({ content: 'This user can not have their nickname changed.' });
+                interaction.reply({ content: `${taggedUser} needs to change their nickname to \`${newNickname}\`.` });
             }
         }
         catch (error) {
