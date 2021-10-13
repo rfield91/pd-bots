@@ -7,7 +7,8 @@ const commands = [
 	new SlashCommandBuilder()
         .setName('setnickname')
         .setDescription('Changes the users nickname')
-        .addStringOption(option => option.setName('newnickname').setDescription('New Nickname').setRequired(true))
+		.addUserOption(option => option.setName('user').setDescription('User to change').setRequired(true))
+		.addStringOption(option => option.setName('newnickname').setDescription('New Nickname').setRequired(true))
 ]
 	.map(command => command.toJSON());
 
