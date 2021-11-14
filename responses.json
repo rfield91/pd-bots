@@ -4,5 +4,15 @@
         "WTF did you do to deserve that,",
         "You done fucked up real good to get that one,",
         "Watch what you type next time,"
+    ],
+    "self_namer_insults": [
+        "🌭",
+        "🍉",
+        "🧃",
+        "🥔",
+        "🥜"
+    ],
+    "self_name_responses": [
+        "Embarassed to be called `%s`, eh? What a %s! Everyone, meet %s!"
     ]
 }

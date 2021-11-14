@@ -9,6 +9,7 @@ const commands = [
         .setDescription('Changes the users nickname')
 		.addUserOption(option => option.setName('user').setDescription('User to change').setRequired(true))
 		.addStringOption(option => option.setName('newnickname').setDescription('New Nickname').setRequired(true))
+		.addStringOption(option => option.setName('options').setDescription('Options').setRequired(false))
 ]
 	.map(command => command.toJSON());
 
