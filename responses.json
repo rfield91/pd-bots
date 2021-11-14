@@ -1,18 +1,26 @@
 {
     "responses": [
-        "Congrats on the new name,",
-        "WTF did you do to deserve that,",
-        "You done fucked up real good to get that one,",
-        "Watch what you type next time,"
+        "wow, `%s`! congrats on the new name: %s!",
+        "jesus, `%s`! WTF did you do to deserve that? everybody look at this sicko: %s",
+        "ha, `%s` done fucked up real good to get this one. idiot -> %s",
+        "`%s`, you should watch what you type! careless typer: %s",
+        "👑 the `%s` is dead! long live the %s! 👑"
     ],
     "self_namer_insults": [
         "🌭",
         "🍉",
         "🧃",
         "🥔",
-        "🥜"
+        "🥜",
+        "🎃",
+        "⚗",
+        "🚍",
+        "⛄",
+        "👃",
+        "🦨",
+        "🦔"
     ],
     "self_name_responses": [
-        "Embarassed to be called `%s`, eh? What a %s! Everyone, meet %s!"
+        "embarassed to be called `%s`, eh? what a %s! everyone, meet %s!"
     ]
 }

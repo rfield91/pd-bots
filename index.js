@@ -1,10 +1,10 @@
 require('dotenv').config();
-var log = require('loglevel');
+let log = require('loglevel');
 const { Client, Intents, Permissions } = require('discord.js');
 const { responses, self_namer_insults, self_name_responses } = require('./responses.json');
 const util = require('util');
 
-log.setLevel('debug'); // Set to debug to get more verbose logging
+log.setLevel('info'); // Set to debug to get more verbose logging
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS] });
 
@@ -25,7 +25,7 @@ client.on('interactionCreate', async interaction => {
         try {
             const callingUser = interaction.user;
             const taggedUser = interaction.options.getMember('user');
-            var newNickname = interaction.options.getString('newnickname');
+            let newNickname = interaction.options.getString('newnickname');
             const previousNickname = taggedUser['nickname'] 
 
             log.debug(`Incoming request from [${callingUser['username']}]`);
@@ -40,7 +40,7 @@ client.on('interactionCreate', async interaction => {
                 return;
             }
 
-            var deservedEmoji;
+            let deservedEmoji;
             if (callingUser['id'] === taggedUser['id']) {
                 log.debug('Calling user is shamefully changing their own nickname');
                 const random_insult_index = randomInteger(0, self_namer_insults.length - 1);
@@ -60,13 +60,14 @@ client.on('interactionCreate', async interaction => {
 
                 if (deservedEmoji) {
                     const randomResponseIndex = randomInteger(0, self_name_responses.length - 1);
-                    const randomResponse = self_name_responses[randomResponseIndex]
-                    const responseText = util.format(randomResponse, previousNickname, deservedEmoji, taggedUser)
+                    const randomResponse = self_name_responses[randomResponseIndex];
+                    const responseText = util.format(randomResponse, previousNickname, deservedEmoji, taggedUser);
                     interaction.reply({ content: responseText });
                 } else {
                     const randomResponseIndex = randomInteger(0, responses.length - 1);
-                    const randomResponse = responses[randomResponseIndex]
-                    interaction.reply({ content: `${responses[randomResponse]} ${taggedUser}` });
+                    const randomResponse = responses[randomResponseIndex];
+                    const responseText = util.format(randomResponse, previousNickname, taggedUser);
+                    interaction.reply({ content: responseText });
                 }
             }
             else {
