@@ -44,12 +44,10 @@ client.on('interactionCreate', async interaction => {
                 return;
             }
 
-            let settingOwnName = callingUser['id'] === taggedUser['id'];
-  
             if (!taggedUser.permissions.has([Permissions.FLAGS.MANAGE_NICKNAMES, Permissions.FLAGS.CHANGE_NICKNAME])) {
                 taggedUser.setNickname(newNickname);
 
-                if (settingOwnName) {
+                if (callingUser['id'] === taggedUser['id']) { // If use is setting their own name...
                     const randomResponseIndex = randomInteger(0, self_name_responses.length - 1);
                     const randomResponse = self_name_responses[randomResponseIndex];
                     const responseText = util.format(randomResponse, previousNickname, taggedUser);
