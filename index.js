@@ -1,7 +1,8 @@
 require('dotenv').config();
 let log = require('loglevel');
 const { Client, Intents, Permissions } = require('discord.js');
-const { responses, self_namer_insults, self_name_responses } = require('./responses.json');
+const { responses } = require('./responses.json');
+const { self_namer_names } = require('./names.json');
 const util = require('util');
 var emojiStrip = require('emoji-strip')
 
@@ -11,6 +12,12 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_
 
 function randomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// Gets a random entry from the passed list
+function getRandomEntry(list) {
+    let randomResponseIndex = randomInteger(0, list.length - 1);
+    return list[randomResponseIndex];
 }
 
 client.once('ready', async () => {
@@ -44,20 +51,29 @@ client.on('interactionCreate', async interaction => {
                 return;
             }
 
-            if (!taggedUser.permissions.has([Permissions.FLAGS.MANAGE_NICKNAMES, Permissions.FLAGS.CHANGE_NICKNAME])) {
-                taggedUser.setNickname(newNickname);
+            let settingOwnName = callingUser['id'] === taggedUser['id'];
+            log.debug(`setting own name: [${settingOwnName}]`)
+            let userHasNicknamePermissions = taggedUser.permissions.has([Permissions.FLAGS.MANAGE_NICKNAMES, Permissions.FLAGS.CHANGE_NICKNAME])
+            log.debug(`user has nickname permissions: [${userHasNicknamePermissions}]`)
 
-                if (callingUser['id'] === taggedUser['id']) { // If use is setting their own name...
-                    const randomResponseIndex = randomInteger(0, self_name_responses.length - 1);
-                    const randomResponse = self_name_responses[randomResponseIndex];
-                    const responseText = util.format(randomResponse, previousNickname, taggedUser);
-                    interaction.reply({ content: responseText });
+            if (!userHasNicknamePermissions) {
+                let responseText;
+                if (settingOwnName) {
+                    let intendedName = newNickname;
+                    let newNickname = getRandomEntry(self_namer_names);
+                    log.debug(`Intended name [${intendedName}] will be swapped for new name: [${newNickname}]`)
+                    responseText = util.format(getRandomEntry(self_name_responses), previousNickname, intendedName, taggedUser);
+
                 } else {
-                    const randomResponseIndex = randomInteger(0, responses.length - 1);
-                    const randomResponse = responses[randomResponseIndex];
-                    const responseText = util.format(randomResponse, previousNickname, taggedUser);
-                    interaction.reply({ content: responseText });
+                    responseText = util.format(getRandomEntry(responses), previousNickname, taggedUser);
                 }
+
+                log.debug(`setting nick for [${taggedUser}] to [${newNickname}]`);
+                taggedUser.setNickname(newNickname);
+                log.debug(`responseText = [${responseText}]`);
+
+                interaction.reply({ content: responseText });
+
             }
             else {
                 log.debug('The tagged user cannot have their nickname changed by others, asking them politely')

@@ -6,8 +6,8 @@
         "`%s`, you should watch what you type! careless typer: %s",
         "👑 the `%s` is dead! long live the %s! 👑"
     ],
-    "self_name_responses": [
-        "cowardly changing your own name, eh `%s`? everyone, meet %s!",
-        "`%s` was embarassed and changed their own name to %s."
+    "self_name_responses": [  
+        "cowardly changing your own name from `%s` to `%s`? nice try! everyone, meet %s!",
+        "`%s` was embarassed and tried to change their own name to `%s`. tired of being called %s? fine, you're %s now"
     ]
 }
