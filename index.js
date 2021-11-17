@@ -1,12 +1,12 @@
 require('dotenv').config();
 let log = require('loglevel');
 const { Client, Intents, Permissions } = require('discord.js');
-const { responses } = require('./responses.json');
+const { other_name_responses, self_name_responses } = require('./responses.json');
 const { self_namer_names } = require('./names.json');
 const util = require('util');
 var emojiStrip = require('emoji-strip')
 
-log.setLevel('info'); // Set to debug to get more verbose logging
+log.setLevel('debug'); // Set to debug to get more verbose logging
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS] });
 
@@ -58,22 +58,21 @@ client.on('interactionCreate', async interaction => {
 
             if (!userHasNicknamePermissions) {
                 let responseText;
+                
                 if (settingOwnName) {
                     let intendedName = newNickname;
-                    let newNickname = getRandomEntry(self_namer_names);
+                    newNickname = getRandomEntry(self_namer_names);
                     log.debug(`Intended name [${intendedName}] will be swapped for new name: [${newNickname}]`)
                     responseText = util.format(getRandomEntry(self_name_responses), previousNickname, intendedName, taggedUser);
-
                 } else {
-                    responseText = util.format(getRandomEntry(responses), previousNickname, taggedUser);
+                    responseText = util.format(getRandomEntry(other_name_responses), previousNickname, taggedUser);
                 }
 
-                log.debug(`setting nick for [${taggedUser}] to [${newNickname}]`);
+                log.debug(`setting nick for [${previousNickname}] to [${newNickname}]`);
                 taggedUser.setNickname(newNickname);
                 log.debug(`responseText = [${responseText}]`);
 
                 interaction.reply({ content: responseText });
-
             }
             else {
                 log.debug('The tagged user cannot have their nickname changed by others, asking them politely')
