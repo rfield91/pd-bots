@@ -6,7 +6,7 @@ const { self_namer_names } = require('./names.json');
 const util = require('util');
 var emojiStrip = require('emoji-strip')
 
-log.setLevel('debug'); // Set to debug to get more verbose logging
+log.setLevel('info'); // Set to debug to get more verbose logging
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS] });
 
@@ -70,8 +70,8 @@ client.on('interactionCreate', async interaction => {
 
                 log.debug(`setting nick for [${previousNickname}] to [${newNickname}]`);
                 taggedUser.setNickname(newNickname);
-                log.debug(`responseText = [${responseText}]`);
 
+                log.debug(`responseText = [${responseText}]`);
                 interaction.reply({ content: responseText });
             }
             else {
