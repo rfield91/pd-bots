@@ -1,7 +1,7 @@
 require('dotenv').config();
 let log = require('loglevel');
 const { Client, Intents, Permissions } = require('discord.js');
-const { other_name_responses, self_name_responses } = require('./responses.json');
+const { other_name_responses, self_name_responses, admin_self_name_responses } = require('./responses.json');
 const { self_namer_names } = require('./names.json');
 const util = require('util');
 var emojiStrip = require('emoji-strip')
@@ -73,7 +73,7 @@ client.on('interactionCreate', async interaction => {
                 
                 if (settingOwnName) {
                     // Don't let the randomly picked name be one someone else currently has
-                    let potentialNames = self_namer_names.filter((name) => !channelNicknames.includes(name))
+                    let potentialNames = self_namer_names.filter((name) => !currentServerNicknames.includes(name))
 
                     let intendedName = newNickname;
                     newNickname = getRandomEntry(potentialNames);
@@ -90,8 +90,20 @@ client.on('interactionCreate', async interaction => {
                 interaction.reply({ content: responseText });
             }
             else {
-                log.debug('The tagged user cannot have their nickname changed by others, asking them politely')
-                interaction.reply({ content: `Could ${taggedUser} please change their nickname to \`${newNickname}\`?` });
+                if (settingOwnName) {
+                    log.debug('tagged user is admin but looking for a change. offer them something new!');
+                    // Don't let the randomly picked name be one someone else currently has
+                    let potentialNames = self_namer_names.filter((name) => !currentServerNicknames.includes(name));
+                    let offeredName = getRandomEntry(potentialNames);
+                    log.debug(`offering [${offeredName}]`);
+                    let responseText = util.format(getRandomEntry(admin_self_name_responses), taggedUser, offeredName);
+                    log.debug(responseText);
+                    interaction.reply({ content: responseText });
+
+                } else {
+                    log.debug('The tagged user cannot have their nickname changed by others, asking them politely')
+                    interaction.reply({ content: `Could ${taggedUser} please change their nickname to \`${newNickname}\`?` });
+                }
             }
         }
         catch (error) {

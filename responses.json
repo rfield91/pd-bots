@@ -9,5 +9,8 @@
     "self_name_responses": [  
         "cowardly changing your own name from `%s` to `%s`? nice try! everyone, meet %s!",
         "`%s` was embarassed and tried to change their own name to `%s`. DENIED! you're %s now"
+    ],
+    "admin_self_name_responses": [
+        "tired of being called %s? hmm. how about you set yourself to `%s`?"
     ]
 }
