@@ -73,7 +73,7 @@ client.on('interactionCreate', async interaction => {
                 
                 if (settingOwnName) {
                     // Don't let the randomly picked name be one someone else currently has
-                    let potentialNames = self_namer_names.filter((name) => !channelNicknames.includes(name))
+                    let potentialNames = self_namer_names.filter((name) => !currentServerNicknames.includes(name))
 
                     let intendedName = newNickname;
                     newNickname = getRandomEntry(potentialNames);
