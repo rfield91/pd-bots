@@ -20,6 +20,7 @@ function getRandomEntry(list) {
     return list[randomResponseIndex];
 }
 
+
 client.once('ready', async () => {
     log.info('Ready');
 });
@@ -41,11 +42,22 @@ client.on('interactionCreate', async interaction => {
             log.debug(`From old nickname: [${previousNickname}]`);
             log.debug(`To new nickname: [${newNickname}]`);
 
+            const currentServerNicknames = (await interaction.member.guild.members.fetch()).map((m) => m.displayName);
+            log.debug("Current nicknames in use on server:");
+            log.debug(currentServerNicknames);
+
             newNickname = emojiStrip(newNickname);
-            log.debug(`After stripping emoji: [${newNickname}]`);
+            log.debug(`newNickname after stripping emoji: [${newNickname}]`);
 
             if (newNickname.length > 32) {
                 let response = `New nickname is too long. Maximum is 32 characters, \`${newNickname}\` is ${newNickname.length}`;
+                log.debug(response);
+                interaction.reply({ content: response, ephemeral: true });
+                return;
+            }
+
+            if (currentServerNicknames.includes(newNickname)) {
+                let response = `New nickname \`${newNickname}\` is already in use, pick something else!`
                 log.debug(response);
                 interaction.reply({ content: response, ephemeral: true });
                 return;
@@ -60,8 +72,11 @@ client.on('interactionCreate', async interaction => {
                 let responseText;
                 
                 if (settingOwnName) {
+                    // Don't let the randomly picked name be one someone else currently has
+                    let potentialNames = self_namer_names.filter((name) => !channelNicknames.includes(name))
+
                     let intendedName = newNickname;
-                    newNickname = getRandomEntry(self_namer_names);
+                    newNickname = getRandomEntry(potentialNames);
                     log.debug(`Intended name [${intendedName}] will be swapped for new name: [${newNickname}]`)
                     responseText = util.format(getRandomEntry(self_name_responses), previousNickname, intendedName, taggedUser);
                 } else {
